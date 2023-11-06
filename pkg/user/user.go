@@ -27,7 +27,7 @@ var (
 type User struct {
 	Email     string `json:"email"`
 	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
+	LastName  string `json:"	"`
 }
 
 func FetchUser(email, tableName string, dynaClient dynamodbiface.DynamoDBAPI) (*User, error) {
@@ -68,10 +68,7 @@ func FetchUsers(tableName string, dynaClient dynamodbiface.DynamoDBAPI) (*[]User
 	return item, nil
 }
 
-func CreateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient dynamodbiface.DynamoDBAPI) (
-	*User,
-	error,
-) {
+func CreateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient dynamodbiface.DynamoDBAPI) (*User, error) {
 	var u User
 
 	if err := json.Unmarshal([]byte(req.Body), &u); err != nil {
@@ -104,10 +101,7 @@ func CreateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient 
 	return &u, nil
 }
 
-func UpdateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient dynamodbiface.DynamoDBAPI) (
-	*User,
-	error,
-) {
+func UpdateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient dynamodbiface.DynamoDBAPI) (*User, error) {
 	var u User
 	if err := json.Unmarshal([]byte(req.Body), &u); err != nil {
 		return nil, errors.New(ErrorInvalidEmail)
