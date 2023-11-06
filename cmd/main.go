@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/athunlal/serverless/pkg/handlers"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
@@ -19,30 +19,28 @@ var (
 func main() {
 	region := os.Getenv("AWS_REGION")
 	awsSession, err := session.NewSession(&aws.Config{
-		Region: aws.String(region),
-	})
+		Region: aws.String(region)})
+
 	if err != nil {
-		fmt.Println(err.Error())
 		return
 	}
-	dynaClient := dynamodb.New(awsSession)
+	dynaClient = dynamodb.New(awsSession)
 	lambda.Start(handler)
 }
 
-const tableName = "LambdaInGoUser"
+const tableName = "go-serverless-yt"
 
 func handler(req events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
 	switch req.HTTPMethod {
 	case "GET":
-		return handlers.GetUser(req, tableName, dyanaClient)
+		return handlers.GetUser(req, tableName, dynaClient)
 	case "POST":
-		return handler.CreateUser(req, tableName, dynaClient)
+		return handlers.CreateUser(req, tableName, dynaClient)
 	case "PUT":
-		return handler.UpdateUser(req, tableName, dynaClient)
-
+		return handlers.UpdateUser(req, tableName, dynaClient)
 	case "DELETE":
-		return handler.DeleteUser(req, tableName, dynaclient)
+		return handlers.DeleteUser(req, tableName, dynaClient)
 	default:
-		return handler.UnhandleMethod()
+		return handlers.UnhandledMethod()
 	}
 }
